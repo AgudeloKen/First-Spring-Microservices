@@ -1,0 +1,22 @@
+package com.ken.gateway.filter;
+
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.function.Predicate;
+
+@Component
+public class RouteValidator {
+
+    private final List<String> openApiEndpoints = List.of(
+            "/auth/login",
+            "/auth/register",
+            "/eureka"
+    );
+
+    public Predicate<ServerHttpRequest> isSecured =
+            r -> openApiEndpoints
+            .stream()
+            .noneMatch(uri -> r.getURI().getPath().contains(uri));
+}
